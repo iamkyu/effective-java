@@ -120,3 +120,50 @@ public class NutritionFactsWithBuilder {
 - 객체가 변경 불가능해짐.
 - `NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8).calories(100).sodium(35).carbohydrate(27).build();` 와 같이 메소드 체이닝 방식으로 사용 가능.
 
+
+## 규칙03. private 생성자나 enum 자료형은 싱글톤 패턴을 따르도록 설계하라.
+
+### 정적멤버를 이용한 싱글톤
+
+```java
+public class Elvis {
+  public static final Evis INSTANCE = new Elvis();
+  private Elvis() { }
+}
+```
+
+- private 생성자는 `Elvis.INSTANCE`를 초기화 할 때 한번만 호출.
+- 하지만 리플렉션(reflection)을 통해 private 생성자에 접근할 수도 있음. 이를 방어하려면 두 번째 객체를 생성하라는 요청을 받으면 예외를 던지도록 수정 필요.
+
+### 정적팩터리 메서드를 이용한 싱글톤
+
+```java
+public class Elvis {
+  private static final Evis INSTANCE = new Elvis();
+  private Elvis() { //두번재 객체를 생성하라는 요청을 받으면 예외를 던지도록 한다 }
+  public static Elvis getInstance() {
+    return INSTANCE;
+  }
+}
+```
+
+- `Elvis.getInstance()`는 항상 같은 객체에 대한 참조를 반환.
+- API를 변경하지 않고도 싱글턴 패턴을 포기하는 것이 가능. (스레드마다 별도의 객체를 반환하도록 수정한다던지)
+- 제네릭 타입의 수용이 쉬움
+
+### Enum을 통한 싱글톤 (Java 1.5 or later)
+
+```java
+public enum EnumInitialization {
+	INSTANCE;
+	static String test = "";
+	public static EnumInitialization getInstance() {
+		test = "test";
+		return INSTANCE;
+	}
+}
+```
+
+- public 필드를 사용하는 구현법과 동등.
+- 좀 더 간결하고, 직렬화가 자동으로 처리. 직렬화가 아무리 복잡하게 이루어져도 여러 객체가 생기지 않으며, 리플랙션을 통한 공격에도 안전.
+- 이와 관련 된 좀 더 자세한 내용은 [https://blog.seotory.com/post/2016/03/java-singleton-pattern](https://blog.seotory.com/post/2016/03/java-singleton-pattern) 을 참고하면 좋다.
