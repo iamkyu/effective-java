@@ -167,3 +167,24 @@ public enum EnumInitialization {
 - public 필드를 사용하는 구현법과 동등.
 - 좀 더 간결하고, 직렬화가 자동으로 처리. 직렬화가 아무리 복잡하게 이루어져도 여러 객체가 생기지 않으며, 리플랙션을 통한 공격에도 안전.
 - 이와 관련 된 좀 더 자세한 내용은 [https://blog.seotory.com/post/2016/03/java-singleton-pattern](https://blog.seotory.com/post/2016/03/java-singleton-pattern) 을 참고하면 좋다.
+
+
+
+## 규칙04. 객체 생성을 막을 때는 private 생성자를 사용하라.
+
+정적 메서드나 필드만 모은 클래스를 만드는 경우
+
+- 기본 자료형 값(primitive value) 또는 배열에 적용되는 메소드를 한군데 모아둘 때. (ex `java.lang.Math`, `java.util.Arrays`)
+- 특정 인터페이스를 구현하는 객체를 만드는 팩터리 메서드 등의 정적 메소드를 모아놓을 때. (ex `java.tuil.Collections`)
+- final 클래스에 적용할 메소드를 모아놓을 때.
+
+```java
+public class UtilityClass {
+  //기본 생성자가 자동 생성되지 못하도록 하여 객체 생성 방지
+  private UtilityClass() {
+    throw new AssertionError();
+  }
+}
+```
+
+위에서 예로 든 경우와 같이 객체 생성이 목적이 아닌 클래스들은 private 생성자를 클래스에 넣어 객체 생성을 방지해야 한다.
