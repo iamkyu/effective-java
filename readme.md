@@ -209,3 +209,17 @@ public class UtilityClass {
 - 가장 간단한 방법은 쓸 일 없는 객체 참조는 무조건 null로 만들어라.
 - 객체 참조를 null 처리하는 것은 규범이라기보단 예외적인 조치가 되어야 한다.
 - 가장 좋은 방법은 변수나 객체를 정의할 때 그 유효 범위를 최대한 좁게 만드는 것이다.
+
+
+
+## 규칙07. 종료자 사용을 피하라
+
+종료자(finalizer)는 예측 불가능하며, 대체로 위험하고, 일반적으로 불필요하다.
+
+> [java.lang.Object.finalize()](http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize())
+
+### 종료자의 단점
+
+- 종료자의 동작은 예측할 수 없다(즉시 실행되지 않으며 실행된다는 보장도 없다).
+- 프로그램의 성능을 심각하게 떨어뜨린다.
+
