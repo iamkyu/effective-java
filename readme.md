@@ -1,4 +1,4 @@
-# Effective Java
+## Effective Java
 본 내용은 [Effective Java|저자 조슈아 블로크|역자 이병준|인사이트 |2014.09.01](http://book.naver.com/bookdb/book_detail.nhn?bid=8064518) 을 학습하며 정리한 내용으로 개인 참고용으로 작성 됨. 샘플 소스 코드는 `src/main/java` 아래에 /챕터번호/규칙번호로 대응된다 (예 `/chap02/rule01`).
 
 
@@ -223,3 +223,39 @@ public class UtilityClass {
 - 종료자의 동작은 예측할 수 없다(즉시 실행되지 않으며 실행된다는 보장도 없다).
 - 프로그램의 성능을 심각하게 떨어뜨린다.
 
+
+
+# CHAP03. 모든 객체의 공통 메소드
+
+## 규칙08. equals를 재정의할 때는 일반 규약을 따르라
+
+### equal를 재정의 하지 않아도 될 때
+
+- 각각의 객체가 고유하다.
+- 클래스에 논리적 동일성 검사 방법이 있건 없건 상관없다.
+- 상위클래스엣 재정의한 equals가 하위 클래스에서 사용하기에도 적당하다.
+- 클래스가 private 또는 package-private로 선언되었고, equals 메서드를 호출할 일이 없다.
+
+
+
+### equals를 정의할 때 준수해야 할 일반 규약
+
+equals 메서드는 동치 관계를 구현한다. 다음과 같은 관계를 동치 관계라 한다.
+
+- 반사성: null이 아닌 참조 x가 있을 때, `x.equals(x)`는 true를 반환.
+- 대칭성: null이 아닌 참조 x와 y가 있을 때, `x.equals(y)`는 `y.equals(x)`가 true일 때만 true를 반환.
+- 추이성: null 아닌 참조 x,y,z가 있을 때, `x.equals(y)`가 true 이고 `y.equals(z)`가 true이면 `x.equals(z)`도 true.
+- 일관성: null 아닌 참조 x와 y가 있을 때, equals를 통해 비교되는 정보에 아무 변화가 없다면, `x.equals(y)` 호출 결과는 호출 횟수에 상관 없이 항상 같아야 한다.
+- null 아닌 참조 x에 대해서, `x.equals(null)`은 항상 false이다.
+
+
+
+### 훌륭한 equals 메서드 구현을 위해 따라야 할 지침
+
+- == 연산자를 사용하여 equals의 인자가 자기 자신인지 검사하라.
+- instanceof 연산자를 사용하여 인자의 자료형이 정확한지 검사하라.
+- equals의 인자를 정확한 자료형으로 변환하라.
+- "중요" 필드 각각이 인자로 주어진 객체의 해당 필드와 일치하는지 검사한다.
+- 대칭성, 추이성, 일관서으이 세 속성이 만족되는지 검토하라.
+- equals를 구현할 때는 hashCode도 재정의하라.
+- equals 메서드의 인자 형을 Object에서 다른 것으로 바꾸지 마라.
