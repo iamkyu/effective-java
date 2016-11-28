@@ -259,3 +259,27 @@ equals 메서드는 동치 관계를 구현한다. 다음과 같은 관계를 �
 - 대칭성, 추이성, 일관서으이 세 속성이 만족되는지 검토하라.
 - equals를 구현할 때는 hashCode도 재정의하라.
 - equals 메서드의 인자 형을 Object에서 다른 것으로 바꾸지 마라.
+
+## 규칙09. equals를 재정의할 때는 반드시 hashCode도 재정의하라
+
+equals 메서드를 재정의 하는 클래스가 hashCode를 재정의 하지 않으면 HashMap, HashSet, Hashtable 같은 해시 기반 컬렉션과 함께 사용하면 오동작하게 된다. Object 클래스 명세의 일반 규약은 아래와 같다.
+
+- 응용프로그램 실해 중 같은 객체의 hashCode를 여러 번 호출하는 경우, equals가 사용하는 정보들이 변경되지 않았다면 언제나 동일한 정수가 반환되어야 한다.
+- equals메서드가 같다고 판정한 두 객체의 hashCode 값은 같아야 한다.
+- equals메서드가 다르다고 판정한 두 객체의 hashCode 값은 꼭 다를 필요는 없다. 그러나 서로 다른 hashCode 값이 나오면 해시 테이블의 성능이 향상될 수 있다는 점은 이해하고 있어야 한다.
+
+
+### 이상적인 해시 함수에 '가까운' 함수를 만드는 방법
+
+1. 17과 같은 0 아닌 상수를 result라는 이름의 int 변수에 저장.
+2. 객체 안에 모든 중요 필드 f에 대해(equals 메서드가 사용하는 필드들) 아래의 절차를 시행.
+   1. f 가 boolean 이면 1 or 0
+   2. f 가 byte char short int 이면 (int)f
+   3. f 가 long 이면 (int)(f ^ ( f >>> 32))
+   4. f 가 float 이면 Float.floatToIntBits(f)
+   5. f 가 double 이면 Double.floatToLongBits(f)를 계산 후 그 결과로 3번을 수행
+   6. f 가 객체 참조일 경우 eqauls 메소드를 재귀적으로 호출하면 hashCode 메소드도 재귀적으로 자동 호출
+   7. f 가 배열이라면 배열의 각 요소를 별개의 필드처럼 계산. Arrays.hashCode 메소드들 중 하나를 사용할 수 있음
+   8. 위의 절차에서 계산 된 해쉬코드 c를 사용하여 result를 계산한다. result = 31 * result + c
+3. result를 반환한다.
+4. 동치 관계에 있는 객체의 해시 코드 값이 똑같이 계산되는지 점검한다.
